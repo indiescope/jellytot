@@ -1,21 +1,20 @@
 chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    if (!request.icon) {
+  ({icon}, sender, sendResponse) => {
+    if (!icon) {
       return;
     }
 
     removeIconsFromHead();
 
-    appendToHead(createIcon(request.icon));
+    appendToHead(createIcon(icon));
   }
 );
 
 function removeIconsFromHead() {
-  var tags = document.getElementsByTagName('link');
-  
-  for (var i = 0; i < tags.length; i++) {
-    var tag = tags[i];
-    var rel = tag.getAttribute('rel');
+  const tags = document.getElementsByTagName('link');
+
+  for (const tag of tags) {
+    const rel = tag.getAttribute('rel');
 
     if (rel && rel.indexOf('icon') !== -1) {
         tag.remove();
@@ -24,7 +23,7 @@ function removeIconsFromHead() {
 }
 
 function createIcon(base64icon) {
-  var icon = document.createElement('link');
+  const icon = document.createElement('link');
   
   icon.setAttribute('rel', 'icon');
   icon.setAttribute('type', 'image/x-icon');

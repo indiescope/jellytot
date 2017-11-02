@@ -1,12 +1,10 @@
 function saveRows() {
-  var rows = document.getElementsByTagName('tr');
-  var items = [];
+  const rows = document.getElementsByTagName('tr');
+  const items = [];
 
-  for (var i = 0; i < rows.length; i++) {
-    var row = rows[i];
-
-    var colour = row.getElementsByClassName('colour')[0].value;
-    var regex = row.getElementsByClassName('regex')[0].value;
+  for (const row of rows) {
+    const colour = row.getElementsByClassName('colour')[0].value;
+    const regex = row.getElementsByClassName('regex')[0].value;
 
     items.push({
       colour: colour,
@@ -16,15 +14,14 @@ function saveRows() {
 
   chrome.storage.sync.set({
     items: items
-  }, function() {
+  }, () => {
     console.log('saved');
   });
 }
 
 function loadRows() {
-  chrome.storage.sync.get('items', function(data) {
-    for (var i = 0; i < data.items.length; i++) {
-      var item = data.items[i];
+  chrome.storage.sync.get('items', ({items}) => {
+    for (const item of items) {
       loadRow(item.colour, item.regex);
     }
   });
@@ -35,13 +32,13 @@ function loadRow(colour, regex) {
 }
 
 function createRow(colour, regex) {
-  var row = document.createElement('tr');
+  const row = document.createElement('tr');
   
-  var col = document.createElement('td');
-  var col2 = document.createElement('td'); 
-  var col3 = document.createElement('td'); 
+  const col = document.createElement('td');
+  const col2 = document.createElement('td'); 
+  const col3 = document.createElement('td'); 
 
-  var inputColour = document.createElement('input');
+  const inputColour = document.createElement('input');
   inputColour.classList.add('colour');
   inputColour.placeholder = 'Colour';
   inputColour.required = true;
@@ -52,7 +49,7 @@ function createRow(colour, regex) {
 
   col.appendChild(inputColour);
 
-  var inputRegex = document.createElement('input');
+  const inputRegex = document.createElement('input');
   inputRegex.classList.add('regex');
   inputRegex.placeholder = 'Regex';
   inputRegex.required = true;
@@ -63,10 +60,10 @@ function createRow(colour, regex) {
 
   col2.appendChild(inputRegex);
 
-  var buttonRemove = document.createElement('button');
+  const buttonRemove = document.createElement('button');
   buttonRemove.innerText = 'Remove';
-  buttonRemove.addEventListener('click', function(e) { 
-    e.target.parentElement.parentElement.remove(); 
+  buttonRemove.addEventListener('click', ({target}) => { 
+    target.parentElement.parentElement.remove(); 
   });
   
   col3.appendChild(buttonRemove);
@@ -86,7 +83,7 @@ function appendRow(row) {
   document.getElementById('js-container').appendChild(row);
 }
 
-document.addEventListener('DOMContentLoaded', function(e) {
+document.addEventListener('DOMContentLoaded', e => {
   document.getElementById('js-add').addEventListener('click', addRow);
   document.getElementById('js-save').addEventListener('click', saveRows);
 
